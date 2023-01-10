@@ -24,7 +24,7 @@ async function startViewer(modelName, uid) {
                 model: "conf_proe",
                 streamingMode: Communicator.StreamingMode.OnDemand,
                 boundingPreviewMode: "none",
-                enginePath: "https://cdn.jsdelivr.net/gh/techsoft3d/hoops-web-viewer@2022.2",
+                enginePath: "https://cdn.jsdelivr.net/gh/techsoft3d/hoops-web-viewer@latest",
                 rendererType: 0
         });
 
