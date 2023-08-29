@@ -38,3 +38,62 @@ async function startViewer(modelName, uid) {
         return viewer;
 
 }
+
+async function fetchVersionNumber() {
+        const conversionServiceURI = "https://csapi.techsoft3d.com";
+
+        let res = await fetch(conversionServiceURI + '/api/hcVersion');
+        var data = await res.json();
+        versionNumer = data;
+        
+        return data
+
+}
+
+
+
+async function initializeViewer() {
+        const models = ['conf_proe', 'proe_v3', 'tire_2', 'tire_3', 'tire_4', 'VoiturePiston', 'toyotire'];
+
+        hwv = await startViewer()
+    
+        hwv.setCallbacks({
+          sceneReady: function () {
+            hwv.getSelectionManager().setHighlightLineElementSelection(false);
+            hwv.getSelectionManager().setHighlightFaceElementSelection(false);
+            hwv.getSelectionManager().setSelectParentIfSelected(false);
+            hwv.getView().setAmbientOcclusionEnabled(true);
+            hwv.getView().setAmbientOcclusionRadius(0.02);
+            hwv.setClientTimeout(0, 60);
+            hwv.getView().setCamera(Communicator.Camera.construct(INITIAL_VIEW));
+            hwv.model.setEnableAutomaticUnitScaling(false);
+    
+          },
+          modelStructureReady: function () {
+            hwv.getView().getNavCube().disable();
+            hwv.getView().getAxisTriad().disable();
+    
+            var op = hwv.operatorManager.getOperator(Communicator.OperatorId.Orbit)
+            op.setOrbitFallbackMode(Communicator.OrbitFallbackMode.CameraTarget)
+    
+            var proe_button = document.getElementById('request_proe');
+            proe_button.style.visibility = "visible"
+    
+            var show_piston_button = document.getElementById('show_piston');
+            show_piston_button.style.visibility = "visible"
+    
+            var wheels_button = document.getElementById('wheels_button');
+            wheels_button.style.visibility = "visible"
+          },
+          streamingActivated: function () {
+            hideDialog();
+          }
+        });
+    
+        const uiConfig = {
+          containerId: "content",
+          screenConfiguration: Sample.screenConfiguration,
+        }
+        const ui = new Communicator.Ui.Desktop.DesktopUi(hwv, uiConfig);
+        window.onresize = function () { hwv.resizeCanvas(); };
+}
