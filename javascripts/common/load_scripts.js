@@ -1,3 +1,4 @@
+var versionNumer
 async function loadDynamicScript() {
   var result = await fetchVersionNumber();
   versionNumer = result['hcVersion']
